@@ -26,6 +26,7 @@ hs_err_pid*
 .gradle
 .DS_STORE
 out
+build
 gradle
 gradlew
 gradlew.bat
