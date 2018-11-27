@@ -1,4 +1,4 @@
-package com.gearfound.itemservice.lost;
+package com.gearfound.itemservice.items.lost;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
