@@ -32,10 +32,24 @@ repositories {
 
 dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-actuator')
-//	implementation('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
+	implementation('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
 	implementation('org.springframework.boot:spring-boot-starter-webflux')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	testImplementation('io.projectreactor:reactor-test')
+	compileOnly "org.projectlombok:lombok:1.16.22"
+	annotationProcessor("org.projectlombok:lombok:1.16.22")
+	testImplementation(
+			'org.junit.jupiter:junit-jupiter-api:5.3.2'
+	)
+	testRuntimeOnly(
+			'org.junit.jupiter:junit-jupiter-engine:5.3.2',
+			'org.junit.vintage:junit-vintage-engine:5.3.2'
+	)
+	testCompile('org.mockito:mockito-junit-jupiter:2.23.4')
+}
+
+test {
+	useJUnitPlatform()
 }
 
 docker {
