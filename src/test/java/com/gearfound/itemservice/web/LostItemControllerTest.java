@@ -59,4 +59,19 @@ class LostItemControllerTest extends AbstractControllerTest {
                 .expectBodyList(LostItem.class)
                 .isEqualTo(Arrays.asList(lostItem));
     }
+
+    @Test
+    void searchLostItems() {
+        //given
+        LostItem lostItem = new LostItem();
+        when(lostItemService.searchLostItems("new iphone")).thenReturn(Flux.just(lostItem));
+
+        //when, then
+        webClient.get().uri("/lost-items?search=new iphone")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(LostItem.class)
+                .isEqualTo(Arrays.asList(lostItem));
+    }
 }

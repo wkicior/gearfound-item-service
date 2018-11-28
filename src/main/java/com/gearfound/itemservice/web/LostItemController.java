@@ -30,4 +30,9 @@ public class LostItemController {
     Flux<LostItem> getAllLostItems() {
         return lostItemService.getAllLostItems();
     }
+
+    @GetMapping(value = "/lost-items", params = "search")
+    Flux<LostItem> searchLostItems(@RequestParam(value = "search", required = true) String searchPhrase) {
+        return lostItemService.searchLostItems(searchPhrase);
+    }
 }
