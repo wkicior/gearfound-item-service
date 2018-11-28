@@ -44,4 +44,17 @@ class FoundItemServiceTest {
         //then
         assertEquals(savedFoundItems.blockFirst(), sampleFoundItem);
     }
+
+    @Test
+    void search() {
+        //given
+        FoundItem sampleLostItem = new FoundItem();
+        when(foundItemRepository.searchFoundItems("some phrase")).thenReturn(Flux.just(sampleLostItem));
+
+        //when
+        Flux<FoundItem> savedLostItems = foundItemService.searchLostItems("some phrase");
+
+        //then
+        assertEquals(savedLostItems.blockFirst(), sampleLostItem);
+    }
 }

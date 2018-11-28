@@ -29,4 +29,9 @@ public class FoundItemController {
     Flux<FoundItem> getAllFoundItems() {
         return foundItemService.getAllFoundItems();
     }
+
+    @GetMapping(value = "/found-items", params = "search")
+    Flux<FoundItem> searchFoundItems(@RequestParam(value = "search", required = true) String searchPhrase) {
+        return foundItemService.searchLostItems(searchPhrase);
+    }
 }

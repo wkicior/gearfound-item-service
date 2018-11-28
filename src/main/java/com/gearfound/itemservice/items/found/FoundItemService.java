@@ -21,4 +21,8 @@ public class FoundItemService {
     public Flux<FoundItem> getAllFoundItems() {
         return this.foundItemRepository.findAll();
     }
+
+    public Flux<FoundItem> searchLostItems(String phrase) {
+        return this.foundItemRepository.searchFoundItems(phrase);
+    }
 }
