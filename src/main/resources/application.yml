@@ -1,9 +1,10 @@
 spring:
   data:
     mongodb:
-      host: localhost
       port: 27017
       database: gearfound-items
+  profiles:
+    active: local
 
 server:
   port: 8100
