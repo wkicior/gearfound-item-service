@@ -4,3 +4,6 @@ spring:
       host: localhost
       port: 27017
       database: gearfound-items
+
+server:
+  port: 8100
