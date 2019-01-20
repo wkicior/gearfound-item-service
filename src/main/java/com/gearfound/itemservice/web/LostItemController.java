@@ -10,7 +10,6 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 
-@CrossOrigin
 @RestController
 public class LostItemController {
     private final LostItemService lostItemService;
