@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 
 class LostItemControllerTest extends AbstractControllerTest {
 
-       @Test
+    @Test
     void postLostItem() throws Exception {
         //given
         LostItem lostItemInput = new LostItem();

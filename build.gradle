@@ -53,7 +53,6 @@ test {
 }
 
 docker {
-
 	name "${project.group}/${bootJar.baseName}"
 	files "build/libs/${bootJar.baseName}-${version}.jar"
 	buildArgs([JAR_FILE: "${bootJar.baseName}-${version}.jar"])
@@ -63,5 +62,4 @@ task dockerBuild {
 	dependsOn 'build'
 	dependsOn 'docker'
 	tasks.findByName('docker').mustRunAfter 'build'
-
 }
