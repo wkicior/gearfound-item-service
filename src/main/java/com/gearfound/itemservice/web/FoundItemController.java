@@ -20,8 +20,8 @@ public class FoundItemController {
 
     @PostMapping("/found-items")
     @ResponseStatus(HttpStatus.CREATED)
-    Mono<FoundItem> saveFoundItem(@RequestBody @Valid FoundItem foundItem) {
-        return foundItemService.save(foundItem);
+    Mono<FoundItem> saveFoundItem(@RequestBody @Valid FoundItem foundItem, @RequestHeader("User-Id") String userId) {
+        return foundItemService.save(userId, foundItem);
     }
 
     @GetMapping("/found-items")

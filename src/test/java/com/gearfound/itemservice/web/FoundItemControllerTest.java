@@ -13,6 +13,8 @@ import static org.mockito.Mockito.when;
 
 class FoundItemControllerTest extends AbstractControllerTest {
 
+    private static final String REGISTRANT_ID = "some-user-id";
+
     @Test
     void postFoundItem() throws Exception {
         //given
@@ -20,10 +22,12 @@ class FoundItemControllerTest extends AbstractControllerTest {
         foundItemInput.setName("some name");
         FoundItem foundItemSaved = new FoundItem();
         foundItemSaved.setId("1234");
-        when(foundItemService.save(foundItemInput)).thenReturn(Mono.just(foundItemSaved));
+        foundItemSaved.setRegistrantId(REGISTRANT_ID);
+        when(foundItemService.save(REGISTRANT_ID, foundItemInput)).thenReturn(Mono.just(foundItemSaved));
 
         //when, then
         webClient.post().uri("/found-items")
+                .header("User-Id", REGISTRANT_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromObject(foundItemInput))
                 .exchange()

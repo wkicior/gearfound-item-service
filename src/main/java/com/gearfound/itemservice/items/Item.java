@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 public abstract class Item {
     @Id
     protected String id;
+
     @TextIndexed(weight=2)
     @NotNull
     protected String name;
@@ -23,4 +24,6 @@ public abstract class Item {
 
     @TextIndexed
     private String description;
+
+    protected String registrantId;
 }

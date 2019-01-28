@@ -14,7 +14,8 @@ public class LostItemService {
         this.lostItemRepository = lostItemRepository;
     }
 
-    public Mono<LostItem> save(LostItem lostItem) {
+    public Mono<LostItem> save(String registrantId, LostItem lostItem) {
+        lostItem.setRegistrantId(registrantId);
         return lostItemRepository.save(lostItem);
     }
 

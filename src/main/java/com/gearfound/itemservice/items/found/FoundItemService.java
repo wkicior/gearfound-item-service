@@ -14,7 +14,8 @@ public class FoundItemService {
         this.foundItemRepository = foundItemRepository;
     }
 
-    public Mono<FoundItem> save(FoundItem foundItem) {
+    public Mono<FoundItem> save(String registrantId, FoundItem foundItem) {
+        foundItem.setRegistrantId(registrantId);
         return this.foundItemRepository.save(foundItem);
     }
 

@@ -13,6 +13,8 @@ import static org.mockito.Mockito.when;
 
 class LostItemControllerTest extends AbstractControllerTest {
 
+    private static final String REGISTRANT_ID = "some-user-id";
+
     @Test
     void postLostItem() throws Exception {
         //given
@@ -20,10 +22,12 @@ class LostItemControllerTest extends AbstractControllerTest {
         lostItemInput.setName("some name");
         LostItem lostItemSaved = new LostItem();
         lostItemSaved.setId("1234");
-        when(lostItemService.save(lostItemInput)).thenReturn(Mono.just(lostItemSaved));
+        lostItemSaved.setRegistrantId(REGISTRANT_ID);
+        when(lostItemService.save(REGISTRANT_ID, lostItemInput)).thenReturn(Mono.just(lostItemSaved));
 
         //when, then
         webClient.post().uri("/lost-items")
+                .header("User-Id", REGISTRANT_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromObject(lostItemInput))
                 .exchange()

@@ -8,12 +8,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LostItemServiceTest {
+    private static final String REGISTRANT_ID = "some-user-id";
     @Mock
     LostItemRepository lostItemRepository;
 
@@ -27,10 +28,12 @@ class LostItemServiceTest {
         when(lostItemRepository.save(sampleLostItem)).thenReturn(Mono.just(sampleLostItem));
 
         //when
-        Mono<LostItem> savedLostItem = lostItemService.save(sampleLostItem);
+        Mono<LostItem> savedLostItemMono = lostItemService.save(REGISTRANT_ID, sampleLostItem);
 
         //then
-        assertEquals(savedLostItem.block(), sampleLostItem);
+        LostItem savedLostItem = savedLostItemMono.block();
+        assertThat(savedLostItem).isEqualTo(sampleLostItem);
+        assertThat(savedLostItem.getRegistrantId()).isEqualTo(REGISTRANT_ID);
     }
 
     @Test
