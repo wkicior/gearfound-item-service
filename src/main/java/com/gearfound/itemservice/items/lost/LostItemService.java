@@ -26,4 +26,8 @@ public class LostItemService {
     public Flux<LostItem> searchLostItems(String phrase) {
         return lostItemRepository.searchLostItems(phrase);
     }
+
+    public Flux<LostItem> getUserLostItems(String userId) {
+        return lostItemRepository.findAllByRegistrantId(userId);
+    }
 }

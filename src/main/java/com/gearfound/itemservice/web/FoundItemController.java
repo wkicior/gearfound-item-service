@@ -18,7 +18,7 @@ public class FoundItemController {
         this.foundItemService = foundItemService;
     }
 
-    @PostMapping("/found-items")
+    @PostMapping("/user/found-items")
     @ResponseStatus(HttpStatus.CREATED)
     Mono<FoundItem> saveFoundItem(@RequestBody @Valid FoundItem foundItem, @RequestHeader("User-Id") String userId) {
         return foundItemService.save(userId, foundItem);
@@ -32,5 +32,10 @@ public class FoundItemController {
     @GetMapping(value = "/found-items", params = "search")
     Flux<FoundItem> searchFoundItems(@RequestParam(value = "search", required = true) String searchPhrase) {
         return foundItemService.searchLostItems(searchPhrase);
+    }
+
+    @GetMapping(value = "/user/found-items")
+    Flux<FoundItem> getUserFoundItems(@RequestHeader("User-Id") String userId) {
+        return foundItemService.getUserLostItems(userId);
     }
 }

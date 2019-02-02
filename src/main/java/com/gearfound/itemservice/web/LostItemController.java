@@ -21,10 +21,15 @@ public class LostItemController {
         this.lostItemService = lostItemService;
     }
 
-    @PostMapping("/lost-items")
+    @PostMapping("/user/lost-items")
     @ResponseStatus(HttpStatus.CREATED)
     Mono<LostItem> saveLostItem(@RequestBody @Valid LostItem lostItem, @RequestHeader("User-Id") String userId) {
         return lostItemService.save(userId, lostItem);
+    }
+
+    @GetMapping(value = "/user/lost-items")
+    Flux<LostItem> getUserLostItems(@RequestHeader("User-Id") String userId) {
+        return lostItemService.getUserLostItems(userId);
     }
 
     @GetMapping("/lost-items")

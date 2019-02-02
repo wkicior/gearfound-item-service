@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.mockito.Mockito.when;
 
@@ -26,7 +27,7 @@ class LostItemControllerTest extends AbstractControllerTest {
         when(lostItemService.save(REGISTRANT_ID, lostItemInput)).thenReturn(Mono.just(lostItemSaved));
 
         //when, then
-        webClient.post().uri("/lost-items")
+        webClient.post().uri("/user/lost-items")
                 .header("User-Id", REGISTRANT_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromObject(lostItemInput))
@@ -37,12 +38,28 @@ class LostItemControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getUserFoundItems() {
+        //given
+        LostItem lostItem = new LostItem();
+        when(lostItemService.getUserLostItems(REGISTRANT_ID)).thenReturn(Flux.just(lostItem));
+
+        //when, then
+        webClient.get().uri("/user/lost-items")
+                .header("User-Id", REGISTRANT_ID)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(LostItem.class)
+                .isEqualTo(Collections.singletonList(lostItem));
+    }
+
+    @Test
     void postLostItemValidate() {
         //given
         LostItem lostItemInput = new LostItem();
 
         //when, then
-        webClient.post().uri("/lost-items")
+        webClient.post().uri("/user/lost-items")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromObject(lostItemInput))
                 .exchange()
@@ -61,7 +78,7 @@ class LostItemControllerTest extends AbstractControllerTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(LostItem.class)
-                .isEqualTo(Arrays.asList(lostItem));
+                .isEqualTo(Collections.singletonList(lostItem));
     }
 
     @Test
@@ -76,6 +93,6 @@ class LostItemControllerTest extends AbstractControllerTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(LostItem.class)
-                .isEqualTo(Arrays.asList(lostItem));
+                .isEqualTo(Collections.singletonList(lostItem));
     }
 }

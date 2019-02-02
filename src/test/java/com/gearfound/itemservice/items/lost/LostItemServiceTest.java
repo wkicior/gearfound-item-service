@@ -50,6 +50,19 @@ class LostItemServiceTest {
     }
 
     @Test
+    void findByUserId() {
+        //given
+        LostItem sampleLostItem = new LostItem();
+        when(lostItemRepository.findAllByRegistrantId(REGISTRANT_ID)).thenReturn(Flux.just(sampleLostItem));
+
+        //when
+        Flux<LostItem> savedLostItems = lostItemService.getUserLostItems(REGISTRANT_ID);
+
+        //then
+        assertEquals(savedLostItems.blockFirst(), sampleLostItem);
+    }
+
+    @Test
     void search() {
         //given
         LostItem sampleLostItem = new LostItem();
