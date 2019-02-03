@@ -1,5 +1,6 @@
 package com.gearfound.itemservice.items.lost;
 
+import com.gearfound.itemservice.items.LostItemNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class LostItemServiceTest {
     private static final String REGISTRANT_ID = "some-user-id";
+    private static final String LOST_ITEM_ID = "some-lost-item-id";
     @Mock
     LostItemRepository lostItemRepository;
 
@@ -73,5 +75,30 @@ class LostItemServiceTest {
 
         //then
         assertEquals(savedLostItems.blockFirst(), sampleLostItem);
+    }
+
+    @Test
+    void findByIdReturnsFoundItemById() {
+        //given
+        LostItem sampleLostItem = new LostItem();
+        when(lostItemRepository.findById(LOST_ITEM_ID)).thenReturn(Mono.just(sampleLostItem));
+
+        //when
+        Mono<LostItem> lostItem = lostItemService.getLostItemById(LOST_ITEM_ID);
+
+        //then
+        assertThat(lostItem.block()).isEqualTo(sampleLostItem);
+    }
+
+    @Test
+    void findByIdReturnsLostItemNotFound() {
+        //given
+        when(lostItemRepository.findById(LOST_ITEM_ID)).thenReturn(Mono.empty());
+
+        //when
+        Mono<LostItem> lostItem = lostItemService.getLostItemById(LOST_ITEM_ID);
+
+        //then
+        assertThrows(LostItemNotFoundException.class, lostItem::block);
     }
 }

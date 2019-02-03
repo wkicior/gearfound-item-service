@@ -1,5 +1,6 @@
 package com.gearfound.itemservice.items.lost;
 
+import com.gearfound.itemservice.items.LostItemNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -29,5 +30,10 @@ public class LostItemService {
 
     public Flux<LostItem> getUserLostItems(String userId) {
         return lostItemRepository.findAllByRegistrantId(userId);
+    }
+
+    public Mono<LostItem> getLostItemById(String lostItemId) {
+        return lostItemRepository.findById(lostItemId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new LostItemNotFoundException())));
     }
 }

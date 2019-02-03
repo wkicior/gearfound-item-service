@@ -41,4 +41,9 @@ public class LostItemController {
     Flux<LostItem> searchLostItems(@RequestParam(value = "search", required = true) String searchPhrase) {
         return lostItemService.searchLostItems(searchPhrase);
     }
+
+    @GetMapping("/lost-items/{id}")
+    Mono<LostItem> getLostItemById(@PathVariable("id") String id) {
+        return lostItemService.getLostItemById(id);
+    }
 }
