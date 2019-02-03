@@ -1,6 +1,9 @@
 package com.gearfound.itemservice.web;
 
 import com.gearfound.itemservice.items.found.FoundItem;
+import com.gearfound.itemservice.items.found.FoundItemNotFoundException;
+import com.gearfound.itemservice.items.lost.LostItem;
+import com.gearfound.itemservice.items.lost.LostItemNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -14,6 +17,7 @@ import static org.mockito.Mockito.when;
 class FoundItemControllerTest extends AbstractControllerTest {
 
     private static final String REGISTRANT_ID = "some-user-id";
+    private static final String FOUND_ITEM_ID = "some-found-item";
 
     @Test
     void getAllFoundItems() {
@@ -28,6 +32,33 @@ class FoundItemControllerTest extends AbstractControllerTest {
                 .expectStatus().isOk()
                 .expectBodyList(FoundItem.class)
                 .isEqualTo(Collections.singletonList(foundItem));
+    }
+
+    @Test
+    void getFoundItemById() {
+        //given
+        FoundItem foundItem = new FoundItem();
+        when(foundItemService.getFoundItemById(FOUND_ITEM_ID)).thenReturn(Mono.just(foundItem));
+
+        //when, then
+        webClient.get().uri("/found-items/" + FOUND_ITEM_ID)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(FoundItem.class)
+                .isEqualTo(foundItem);
+    }
+
+    @Test
+    void getFoundItemByIdReturns404IfLostItemIsNotFound() {
+        //given
+        when(foundItemService.getFoundItemById(FOUND_ITEM_ID)).thenReturn(Mono.defer(() -> Mono.error(new FoundItemNotFoundException())));
+
+        //when, then
+        webClient.get().uri("/found-items/" + FOUND_ITEM_ID)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test

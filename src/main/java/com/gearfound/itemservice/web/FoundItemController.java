@@ -30,6 +30,11 @@ public class FoundItemController {
         return foundItemService.searchLostItems(searchPhrase);
     }
 
+    @GetMapping("/{id}")
+    Mono<FoundItem> getLostItemById(@PathVariable("id") String id) {
+        return foundItemService.getFoundItemById(id);
+    }
+
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     Mono<FoundItem> saveFoundItem(@RequestBody @Valid FoundItem foundItem, @RequestHeader("User-Id") String userId) {

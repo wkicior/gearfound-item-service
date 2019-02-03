@@ -10,11 +10,13 @@ import reactor.core.publisher.Mono;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FoundItemServiceTest {
     private static final String REGISTRANT_ID = "some-user-id";
+    private static final String FOUND_ITEM_ID = "some-found-item-id";
     @Mock
     FoundItemRepository foundItemRepository;
 
@@ -73,5 +75,30 @@ class FoundItemServiceTest {
 
         //then
         assertEquals(savedLostItems.blockFirst(), sampleLostItem);
+    }
+
+    @Test
+    void findByIdReturnsFoundItemById() {
+        //given
+        FoundItem sampleFoundItem = new FoundItem();
+        when(foundItemRepository.findById(FOUND_ITEM_ID)).thenReturn(Mono.just(sampleFoundItem));
+
+        //when
+        Mono<FoundItem> FoundItem = foundItemService.getFoundItemById(FOUND_ITEM_ID);
+
+        //then
+        assertThat(FoundItem.block()).isEqualTo(sampleFoundItem);
+    }
+
+    @Test
+    void findByIdReturnsFoundItemNotFound() {
+        //given
+        when(foundItemRepository.findById(FOUND_ITEM_ID)).thenReturn(Mono.empty());
+
+        //when
+        Mono<FoundItem> FoundItem = foundItemService.getFoundItemById(FOUND_ITEM_ID);
+
+        //then
+        assertThrows(FoundItemNotFoundException.class, FoundItem::block);
     }
 }

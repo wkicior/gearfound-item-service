@@ -1,6 +1,7 @@
 package com.gearfound.itemservice.web;
 
 
+import com.gearfound.itemservice.items.found.FoundItemNotFoundException;
 import com.gearfound.itemservice.items.found.NoAccessToFoundItemException;
 import com.gearfound.itemservice.items.lost.LostItemNotFoundException;
 import com.gearfound.itemservice.items.lost.NoAccessToLostItemException;
@@ -13,7 +14,13 @@ public class ExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @org.springframework.web.bind.annotation.ExceptionHandler(LostItemNotFoundException.class)
-    public void handleNotFound() {
+    public void handleNotFoundLostItem() {
+        //
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @org.springframework.web.bind.annotation.ExceptionHandler(FoundItemNotFoundException.class)
+    public void handleNotFoundFoundItem() {
         //
     }
 

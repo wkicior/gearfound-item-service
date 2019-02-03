@@ -30,4 +30,9 @@ public class FoundItemService {
     public Flux<FoundItem> getUserLostItems(String userId) {
         return this.foundItemRepository.findAllByRegistrantId(userId);
     }
+
+    public Mono<FoundItem> getFoundItemById(String foundItemId) {
+        return this.foundItemRepository.findById(foundItemId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new FoundItemNotFoundException())));
+    }
 }
