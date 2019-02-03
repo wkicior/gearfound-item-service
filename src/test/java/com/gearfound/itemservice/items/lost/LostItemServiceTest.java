@@ -1,6 +1,5 @@
 package com.gearfound.itemservice.items.lost;
 
-import com.gearfound.itemservice.items.LostItemNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

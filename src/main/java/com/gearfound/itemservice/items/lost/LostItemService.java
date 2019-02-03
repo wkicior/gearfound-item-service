@@ -1,6 +1,5 @@
 package com.gearfound.itemservice.items.lost;
 
-import com.gearfound.itemservice.items.LostItemNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
