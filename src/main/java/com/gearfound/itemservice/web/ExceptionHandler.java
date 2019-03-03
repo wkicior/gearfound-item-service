@@ -3,6 +3,7 @@ package com.gearfound.itemservice.web;
 
 import com.gearfound.itemservice.items.found.FoundItemNotFoundException;
 import com.gearfound.itemservice.items.found.NoAccessToFoundItemException;
+import com.gearfound.itemservice.items.lost.LostItemIdDoesNotMatchException;
 import com.gearfound.itemservice.items.lost.LostItemNotFoundException;
 import com.gearfound.itemservice.items.lost.NoAccessToLostItemException;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,12 @@ public class ExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @org.springframework.web.bind.annotation.ExceptionHandler(NoAccessToFoundItemException.class)
     public void handleForbiddenFoundItem() {
+        //
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @org.springframework.web.bind.annotation.ExceptionHandler(LostItemIdDoesNotMatchException.class)
+    public void handleLostItemIdDoesNotMatchException() {
         //
     }
 }

@@ -1,5 +1,6 @@
 package com.gearfound.itemservice.web;
 
+import com.gearfound.itemservice.items.lost.LostItemIdDoesNotMatchException;
 import com.gearfound.itemservice.items.lost.NoAccessToLostItemException;
 import com.gearfound.itemservice.items.lost.LostItem;
 import com.gearfound.itemservice.items.lost.LostItemService;
@@ -32,6 +33,14 @@ public class LostItemController {
     @GetMapping("/{id}")
     Mono<LostItem> getLostItemById(@PathVariable("id") String id) {
         return lostItemService.getLostItemById(id);
+    }
+
+    @PutMapping("/{id}")
+    Mono<LostItem> editLostItem(@PathVariable("id") String id, @RequestHeader("User-Id") String userId, @RequestBody @Valid LostItem lostItem) {
+        if (!id.equals(lostItem.getId())) {
+            return Mono.defer(() -> Mono.error(new LostItemIdDoesNotMatchException()));
+        }
+        return lostItemService.edit(userId, lostItem);
     }
 
     @GetMapping(params = "registrantId")

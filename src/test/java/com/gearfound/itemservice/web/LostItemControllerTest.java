@@ -95,6 +95,47 @@ class LostItemControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void editLostItem() throws Exception {
+        //given
+        LostItem lostItemInput = new LostItem();
+        lostItemInput.setName("some name");
+        lostItemInput.setId("1234");
+        LostItem lostItemSaved = new LostItem();
+        lostItemSaved.setId("1234");
+        lostItemSaved.setRegistrantId(REGISTRANT_ID);
+        when(lostItemService.edit(REGISTRANT_ID, lostItemInput)).thenReturn(Mono.just(lostItemSaved));
+
+        //when, then
+        webClient.put().uri("/lost-items/1234")
+                .header("User-Id", REGISTRANT_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(lostItemInput))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(LostItem.class)
+                .isEqualTo(lostItemSaved);
+    }
+
+    @Test
+    void editLostItemReturnsBadRequestIfIdFromBodyDoesNotMatchRequestParamId() throws Exception {
+        //given
+        LostItem lostItemInput = new LostItem();
+        lostItemInput.setName("some name");
+        LostItem lostItemSaved = new LostItem();
+        lostItemSaved.setId("1234");
+        lostItemSaved.setRegistrantId(REGISTRANT_ID);
+        when(lostItemService.save(REGISTRANT_ID, lostItemInput)).thenReturn(Mono.just(lostItemSaved));
+
+        //when, then
+        webClient.put().uri("/lost-items/1234999999")
+                .header("User-Id", REGISTRANT_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromObject(lostItemInput))
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
     void getUserFoundItems() {
         //given
         LostItem lostItem = new LostItem();

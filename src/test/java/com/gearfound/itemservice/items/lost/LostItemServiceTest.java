@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -99,5 +100,37 @@ class LostItemServiceTest {
 
         //then
         assertThrows(LostItemNotFoundException.class, lostItem::block);
+    }
+
+    @Test
+    void editThrowsNoAccessToLostItemExceptionIfUserIdDoesNotMatchRegistrantId() {
+        //given
+        LostItem sampleLostItem = new LostItem();
+        sampleLostItem.setId(LOST_ITEM_ID);
+        sampleLostItem.setRegistrantId("some-other-registrant");
+        when(lostItemRepository.findById(LOST_ITEM_ID)).thenReturn(Mono.just(sampleLostItem));
+
+        //when
+        Mono<LostItem> lostItem = lostItemService.edit(REGISTRANT_ID, sampleLostItem);
+
+        //then
+        assertThrows(NoAccessToLostItemException.class, lostItem::block);
+    }
+
+    @Test
+    void editSavesLostItem() {
+        //given
+        LostItem sampleLostItem = new LostItem();
+        sampleLostItem.setId(LOST_ITEM_ID);
+        sampleLostItem.setRegistrantId(REGISTRANT_ID);
+        when(lostItemRepository.findById(LOST_ITEM_ID)).thenReturn(Mono.just(sampleLostItem));
+        when(lostItemRepository.save(sampleLostItem)).thenReturn(Mono.just(sampleLostItem));
+
+        //when
+        Mono<LostItem> lostItem = lostItemService.edit(REGISTRANT_ID, sampleLostItem);
+
+        //then
+        assertThat(lostItem.block()).isEqualTo(sampleLostItem);
+        Mockito.verify(lostItemRepository).save(sampleLostItem);
     }
 }

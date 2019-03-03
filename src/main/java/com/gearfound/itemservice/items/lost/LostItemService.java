@@ -35,4 +35,14 @@ public class LostItemService {
         return lostItemRepository.findById(lostItemId)
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new LostItemNotFoundException())));
     }
+
+    public Mono<LostItem> edit(String userId, LostItem lostItemInput) {
+        return lostItemRepository.findById(lostItemInput.getId()).flatMap(i -> {
+            if (!i.getRegistrantId().equals(userId)) {
+                return Mono.error(new NoAccessToLostItemException());
+            }
+            lostItemInput.setRegistrantId(userId);
+            return lostItemRepository.save(lostItemInput);
+        });
+    }
 }
